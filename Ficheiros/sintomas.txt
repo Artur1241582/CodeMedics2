@@ -1,0 +1,66 @@
+Dor no peito;Vermelha;CARD
+Palpitações;Laranja;CARD
+Coração acelerado;Laranja;CARD
+Falta de ar ao esforço;Laranja;CARD
+Tonturas ao levantar;Laranja;CARD
+Desmaio súbito;Vermelha;CARD
+Inchaço nos tornozelos;Laranja;CARD
+Dor no peito irradiada para braço;Vermelha;CARD
+Pressão arterial muito alta;Laranja;CARD
+Batimentos irregulares;Laranja;CARD
+Cansaço extremo sem motivo;Laranja;CARD
+Suores frios repentinos;Vermelha;CARD
+Sensação de peso no peito;Laranja;CARD
+Dificuldade em respirar deitado;Laranja;CARD
+Febre alta persistente;Laranja;PEDI
+Vómitos repetidos;Laranja;PEDI
+Diarreia intensa;Laranja;PEDI
+Choro inconsolável;Laranja;PEDI
+Erupção cutânea súbita;Verde;PEDI
+Dificuldade em respirar;Vermelha;PEDI
+Tosse persistente;Verde;PEDI
+Letargia incomum;Laranja;PEDI
+Convulsões;Vermelha;PEDI
+Não comer ou beber;Laranja;PEDI
+Desidratação;Laranja;PEDI
+Dores abdominais fortes;Laranja;PEDI
+Irritabilidade persistente;Verde;PEDI
+Manchas roxas sem explicação;Laranja;PEDI
+Chiar ao respirar;Laranja;PEDI
+Dor no joelho;Verde;ORTO
+Dor nas costas;Verde;ORTO
+Fratura suspeita;Vermelha;ORTO
+Inchaço articular;Laranja;ORTO
+Dificuldade em mover um braço ou perna;Laranja;ORTO
+Dor no ombro;Verde;ORTO
+Entorses frequentes;Verde;ORTO
+Rigidez articular;Verde;ORTO
+Dor após queda;Laranja;ORTO
+Deformidade num membro;Vermelha;ORTO
+Espasmos musculares;Verde;ORTO
+Dor na anca ao andar;Laranja;ORTO
+Formigueiro num membro;Laranja;ORTO
+Inflamação do tendão;Verde;ORTO
+Perda de força num membro;Laranja;ORTO
+Tonturas;Laranja;CARD;PEDI
+Dor torácica ao respirar;Vermelha;CARD;PEDI
+Falta de ar;Vermelha;CARD;PEDI
+Cansaço físico fácil;Verde;CARD;PEDI
+Taquicardia em repouso;Laranja;CARD;PEDI
+Dor muscular pós-esforço;Verde;PEDI;ORTO
+Dificuldade em caminhar;Laranja;PEDI;ORTO
+Queda com impacto;Laranja;PEDI;ORTO
+Postura alterada;Verde;PEDI;ORTO
+Inchaço de membro;Laranja;PEDI;ORTO
+Dor no peito leve;Laranja;CARD;PEDI
+Edema generalizado;Laranja;CARD;PEDI
+Desmaio após exercício;Laranja;CARD;PEDI
+Dores de crescimento;Verde;PEDI;ORTO
+Batimento irregular percebido;Laranja;CARD;PEDI
+Fraqueza num membro;Laranja;ORTO;PEDI
+Palidez súbita;Laranja;CARD;PEDI
+Cansaço após esforço mínimo;Laranja;CARD;ORTO
+Dor torácica após queda;Laranja;CARD;ORTO
+Dificuldade em levantar peso;Verde;ORTO;CARD
+Dores difusas nos membros;Verde;PEDI;ORTO
+Dor ao respirar fundo;Laranja;CARD;ORTO
