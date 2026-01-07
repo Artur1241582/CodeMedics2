@@ -20,7 +20,7 @@ public class MenuGestao {
         boolean voltar = false;
 
         while (!voltar) {
-            Utils.limparConsola();
+
             mostrarCabecalho(config);
             System.out.println("\n┌────────────────────────────────────────────────────────────┐");
             System.out.println("│        GESTÃO DE MÉDICOS, ESPECIALIDADES E SINTOMAS        │");
@@ -55,7 +55,8 @@ public class MenuGestao {
         boolean voltar = false;
 
         while (!voltar) {
-            Utils.limparConsola();
+
+
             mostrarCabecalho(config);
             System.out.println("\n┌────────────────────────────────────────────────────────────┐");
             System.out.println("│                   GESTÃO DE MÉDICOS                        │");
@@ -79,7 +80,6 @@ public class MenuGestao {
                     break;
                 case 2:
                     // Listar médicos do ficheiro
-                    Utils.limparConsola();
                     mostrarCabecalho(config);
                     int numMedicos = gestorFicheiros.listarMedicos();
                     gestorNotif.adicionarLog("Listados " + numMedicos + " médicos");
@@ -108,7 +108,6 @@ public class MenuGestao {
         boolean voltar = false;
 
         while (!voltar) {
-            Utils.limparConsola();
             mostrarCabecalho(config);
             System.out.println("\n┌────────────────────────────────────────────────────────────┐");
             System.out.println("│               GESTÃO DE ESPECIALIDADES                     │");
@@ -132,7 +131,6 @@ public class MenuGestao {
                     break;
                 case 2:
                     // Listar especialidades do ficheiro
-                    Utils.limparConsola();
                     mostrarCabecalho(config);
                     int numEspecialidades = gestorFicheiros.listarEspecialidades();
                     gestorNotif.adicionarLog("Listadas " + numEspecialidades + " especialidades");
@@ -161,7 +159,6 @@ public class MenuGestao {
         boolean voltar = false;
 
         while (!voltar) {
-            Utils.limparConsola();
             mostrarCabecalho(config);
             System.out.println("\n┌────────────────────────────────────────────────────────────┐");
             System.out.println("│                   GESTÃO DE SINTOMAS                       │");
@@ -186,7 +183,6 @@ public class MenuGestao {
                     break;
                 case 2:
                     // Listar sintomas do ficheiro
-                    Utils.limparConsola();
                     mostrarCabecalho(config);
                     int numSintomas = gestorFicheiros.listarSintomas();
                     gestorNotif.adicionarLog("Listados " + numSintomas + " sintomas");

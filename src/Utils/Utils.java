@@ -23,10 +23,10 @@ public class Utils {
                 if (opcao >= min && opcao <= max) {
                     valido = true;
                 } else {
-                    System.out.print("❌ Opção inválida! Escolha entre " + min + " e " + max + ": ");
+                    System.out.print("Opção inválida! Escolha entre " + min + " e " + max + ": ");
                 }
             } catch (NumberFormatException e) {
-                System.out.print("❌ Por favor, insira um número válido: ");
+                System.out.print("Por favor, insira um número válido: ");
             }
         }
         return opcao;
@@ -51,10 +51,10 @@ public class Utils {
                 if (numero > 0) {
                     valido = true;
                 } else {
-                    System.out.println("❌ Por favor, insira um número positivo!");
+                    System.out.println("Por favor, insira um número positivo!");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("❌ Por favor, insira um número válido!");
+                System.out.println("Por favor, insira um número válido!");
             }
         }
         return numero;
@@ -79,10 +79,10 @@ public class Utils {
                 if (numero >= 0) {
                     valido = true;
                 } else {
-                    System.out.println("❌ Por favor, insira um número válido!");
+                    System.out.println(" Por favor, insira um número válido!");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("❌ Por favor, insira um número válido!");
+                System.out.println(" Por favor, insira um número válido!");
             }
         }
         return numero;
@@ -105,7 +105,7 @@ public class Utils {
             if (!texto.isEmpty()) {
                 valido = true;
             } else {
-                System.out.println("❌ O campo não pode estar vazio!");
+                System.out.println(" O campo não pode estar vazio!");
             }
         }
         return texto;
@@ -132,14 +132,6 @@ public class Utils {
         scanner.nextLine();
     }
 
-    /**
-     * Limpa a consola (simula limpeza com linhas em branco)
-     */
-    public static void limparConsola() {
-        for (int i = 0; i < 50; i++) {
-            System.out.println();
-        }
-    }
 
     /**
      * Formata um número com zeros à esquerda
@@ -260,7 +252,7 @@ public class Utils {
      * @param mensagem Mensagem a mostrar
      */
     public static void mostrarSucesso(String mensagem) {
-        System.out.println("\n✓ " + mensagem);
+        System.out.println("\n" + mensagem);
     }
 
     /**
@@ -268,7 +260,7 @@ public class Utils {
      * @param mensagem Mensagem a mostrar
      */
     public static void mostrarErro(String mensagem) {
-        System.out.println("\n❌ " + mensagem);
+        System.out.println("\n" + mensagem);
     }
 
     /**
@@ -276,7 +268,7 @@ public class Utils {
      * @param mensagem Mensagem a mostrar
      */
     public static void mostrarAviso(String mensagem) {
-        System.out.println("\n⚠ " + mensagem);
+        System.out.println("\n" + mensagem);
     }
 
     /**
@@ -284,6 +276,6 @@ public class Utils {
      * @param mensagem Mensagem a mostrar
      */
     public static void mostrarInfo(String mensagem) {
-        System.out.println("\nℹ " + mensagem);
+        System.out.println("\n" + mensagem);
     }
 }

@@ -35,7 +35,7 @@ public class GestorFicheiros {
         File ficheiro = new File(caminhoFicheiros + File.separator + FICHEIRO_MEDICOS);
 
         if (!ficheiro.exists()) {
-            System.out.println("❌ Ficheiro de médicos não encontrado!");
+            System.out.println("Ficheiro de médicos não encontrado!");
             return 0;
         }
 
@@ -75,7 +75,7 @@ public class GestorFicheiros {
             System.out.println("Total de médicos: " + contador);
 
         } catch (IOException e) {
-            System.err.println("❌ Erro ao ler ficheiro: " + e.getMessage());
+            System.err.println("Erro ao ler ficheiro: " + e.getMessage());
             return 0;
         }
 
@@ -90,7 +90,7 @@ public class GestorFicheiros {
         File ficheiro = new File(caminhoFicheiros + File.separator + FICHEIRO_ESPECIALIDADES);
 
         if (!ficheiro.exists()) {
-            System.out.println("❌ Ficheiro de especialidades não encontrado!");
+            System.out.println("Ficheiro de especialidades não encontrado!");
             return 0;
         }
 
@@ -126,7 +126,7 @@ public class GestorFicheiros {
             System.out.println("Total de especialidades: " + contador);
 
         } catch (IOException e) {
-            System.err.println("❌ Erro ao ler ficheiro: " + e.getMessage());
+            System.err.println("Erro ao ler ficheiro: " + e.getMessage());
             return 0;
         }
 
@@ -141,7 +141,7 @@ public class GestorFicheiros {
         File ficheiro = new File(caminhoFicheiros + File.separator + FICHEIRO_SINTOMAS);
 
         if (!ficheiro.exists()) {
-            System.out.println("❌ Ficheiro de sintomas não encontrado!");
+            System.out.println("Ficheiro de sintomas não encontrado!");
             return 0;
         }
 
@@ -179,7 +179,7 @@ public class GestorFicheiros {
             System.out.println("Total de sintomas: " + contador);
 
         } catch (IOException e) {
-            System.err.println("❌ Erro ao ler ficheiro: " + e.getMessage());
+            System.err.println("Erro ao ler ficheiro: " + e.getMessage());
             return 0;
         }
 
@@ -216,7 +216,7 @@ public class GestorFicheiros {
             }
 
         } catch (IOException e) {
-            System.err.println("❌ Erro ao carregar médicos: " + e.getMessage());
+            System.err.println("Erro ao carregar médicos: " + e.getMessage());
             return new String[0];
         }
 
@@ -259,7 +259,7 @@ public class GestorFicheiros {
             }
 
         } catch (IOException e) {
-            System.err.println("❌ Erro ao carregar especialidades: " + e.getMessage());
+            System.err.println("Erro ao carregar especialidades: " + e.getMessage());
             return new String[0];
         }
 
@@ -302,7 +302,7 @@ public class GestorFicheiros {
             }
 
         } catch (IOException e) {
-            System.err.println("❌ Erro ao carregar sintomas: " + e.getMessage());
+            System.err.println("Erro ao carregar sintomas: " + e.getMessage());
             return new String[0];
         }
 
@@ -336,7 +336,7 @@ public class GestorFicheiros {
             }
             return true;
         } catch (IOException e) {
-            System.err.println("❌ Erro ao guardar ficheiro: " + e.getMessage());
+            System.err.println("Erro ao guardar ficheiro: " + e.getMessage());
             return false;
         }
     }
@@ -359,7 +359,7 @@ public class GestorFicheiros {
             pw.println(linha);
             return true;
         } catch (IOException e) {
-            System.err.println("❌ Erro ao adicionar linha: " + e.getMessage());
+            System.err.println("Erro ao adicionar linha: " + e.getMessage());
             return false;
         }
     }
@@ -398,7 +398,7 @@ public class GestorFicheiros {
             }
 
         } catch (IOException e) {
-            System.err.println("❌ Erro ao contar linhas: " + e.getMessage());
+            System.err.println("Erro ao contar linhas: " + e.getMessage());
         }
 
         return contador;

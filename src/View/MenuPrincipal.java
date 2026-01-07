@@ -6,64 +6,54 @@ import Utils.Utils;
 
 import java.util.Scanner;
 
-
 public class MenuPrincipal {
 
     private Scanner scanner;
     private Configuracoes config;
     private GestorNotificacoes gestorNotif;
 
-    /**
-     * Construtor - inicializa o sistema
-     */
     public MenuPrincipal() {
         this.scanner = new Scanner(System.in);
         this.config = new Configuracoes();
         this.gestorNotif = new GestorNotificacoes();
     }
 
-    /**
-     * Método público para iniciar o sistema
-     * Este método é chamado pelo Main.java
-     */
     public void iniciar() {
-        // Carregar dados iniciais
         carregarDadosIniciais();
 
-        boolean sair = false;
 
-        while (!sair) {
-            limparConsola();
+        int opcao = 0;
+
+        while (opcao != 5) {
             mostrarCabecalho();
             mostrarNotificacoesPendentes();
             mostrarMenuPrincipal();
 
-            int opcao = lerOpcao(1, 5);
+            opcao = lerOpcao(1, 5);
 
             switch (opcao) {
                 case 1:
                     MenuGestao.mostrar(scanner, config, gestorNotif);
                     break;
                 case 2:
-                    //MenuFuncionamento.mostrar(scanner, config, gestorNotif);
+                    // MenuFuncionamento.mostrar(scanner, config, gestorNotif);
                     break;
                 case 3:
-                    //MenuEstatisticas.mostrar(scanner, config, gestorNotif);
+                    // MenuEstatisticas.mostrar(scanner, config, gestorNotif);
                     break;
                 case 4:
-                    //MenuConfiguracoes.mostrar(scanner, config, gestorNotif);
+                    // MenuConfiguracoes.mostrar(scanner, config, gestorNotif);
                     break;
                 case 5:
-                    sair = confirmarSaida();
                     break;
             }
         }
-
-        // Guardar dados antes de sair
         guardarDados();
-        System.out.println("\nSistema encerrado. Até breve!");
+        System.out.println("\n Até breve!");
         scanner.close();
     }
+
+    // --- Restantes métodos permanecem iguais ---
 
     private void mostrarCabecalho() {
         System.out.println("╔════════════════════════════════════════════════════════════╗");
@@ -92,7 +82,7 @@ public class MenuPrincipal {
         String[] notifs = gestorNotif.obterNotificacoesPendentes();
         if (notifs.length > 0) {
             System.out.println("\n╔════════════════════════════════════════════════════════════╗");
-            System.out.println("║                    🔔 NOTIFICAÇÕES                         ║");
+            System.out.println("║                     NOTIFICAÇÕES                         ║");
             System.out.println("╠════════════════════════════════════════════════════════════╣");
             for (String notif : notifs) {
                 System.out.println("║ • " + notif);
@@ -104,22 +94,14 @@ public class MenuPrincipal {
 
     private void carregarDadosIniciais() {
         System.out.println("Carregando dados do sistema...");
-        // TODO: Carregar ficheiros de médicos, especialidades, sintomas
         gestorNotif.adicionarLog("Sistema iniciado");
-        System.out.println("✓ Dados carregados com sucesso!\n");
+        System.out.println(" Dados carregados com sucesso!\n");
     }
 
     private void guardarDados() {
         System.out.println("\nGuardando dados...");
-        // TODO: Guardar todos os dados em ficheiros
         gestorNotif.adicionarLog("Dados guardados ao sair do sistema");
-        System.out.println("✓ Dados guardados com sucesso!");
-    }
-
-    private boolean confirmarSaida() {
-        System.out.print("\n⚠ Tem a certeza que deseja sair? (S/N): ");
-        String resposta = scanner.nextLine().trim().toUpperCase();
-        return resposta.equals("S");
+        System.out.println(" Dados guardados com sucesso!");
     }
 
     private int lerOpcao(int min, int max) {
@@ -132,19 +114,12 @@ public class MenuPrincipal {
                 if (opcao >= min && opcao <= max) {
                     valido = true;
                 } else {
-                    System.out.print("❌ Opção inválida! Escolha entre " + min + " e " + max + ": ");
+                    System.out.print(" Opção inválida! Escolha entre " + min + " e " + max + ": ");
                 }
             } catch (NumberFormatException e) {
-                System.out.print("❌ Por favor, insira um número válido: ");
+                System.out.print(" Por favor, insira um número válido: ");
             }
         }
         return opcao;
-    }
-
-    private void limparConsola() {
-        // Simula limpeza da consola
-        for (int i = 0; i < 50; i++) {
-            System.out.println();
-        }
     }
 }

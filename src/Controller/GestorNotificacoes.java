@@ -272,11 +272,11 @@ public class GestorNotificacoes {
                 pw.println(logs[i]);
             }
 
-            System.out.println("✓ Logs guardados com sucesso!");
+            System.out.println("Logs guardados com sucesso!");
             return true;
 
         } catch (IOException e) {
-            System.err.println("❌ Erro ao guardar logs: " + e.getMessage());
+            System.err.println("Erro ao guardar logs: " + e.getMessage());
             return false;
         }
     }
@@ -308,7 +308,7 @@ public class GestorNotificacoes {
             }
 
         } catch (IOException e) {
-            System.err.println("❌ Erro ao carregar logs: " + e.getMessage());
+            System.err.println(" Erro ao carregar logs: " + e.getMessage());
         }
 
         return logsCarregados;
@@ -353,30 +353,30 @@ public class GestorNotificacoes {
      */
 
     public void notificarMedicoDisponivel(String nomeMedico, String especialidade) {
-        adicionarNotificacao("✓ Médico " + nomeMedico + " (" + especialidade + ") ficou disponível");
+        adicionarNotificacao("Médico " + nomeMedico + " (" + especialidade + ") ficou disponível");
     }
 
     public void notificarElevacaoUrgencia(String nomePaciente, String nivelAntigo, String nivelNovo) {
-        adicionarNotificacao("⚠ Paciente " + nomePaciente + " - Urgência elevada: " + nivelAntigo + " → " + nivelNovo);
+        adicionarNotificacao("Paciente " + nomePaciente + " - Urgência elevada: " + nivelAntigo + " → " + nivelNovo);
     }
 
     public void notificarPacienteAtendido(String nomePaciente, String nomeMedico) {
-        adicionarNotificacao("✓ Paciente " + nomePaciente + " atendido por " + nomeMedico);
+        adicionarNotificacao("Paciente " + nomePaciente + " atendido por " + nomeMedico);
     }
 
     public void notificarPacienteTriagem(String nomePaciente, String nivelUrgencia) {
-        adicionarNotificacao("📋 Paciente " + nomePaciente + " - Triagem concluída: " + nivelUrgencia);
+        adicionarNotificacao("Paciente " + nomePaciente + " - Triagem concluída: " + nivelUrgencia);
     }
 
     public void notificarMedicoEmDescanso(String nomeMedico) {
-        adicionarNotificacao("💤 Médico " + nomeMedico + " entrou em período de descanso");
+        adicionarNotificacao(" Médico " + nomeMedico + " entrou em período de descanso");
     }
 
     public void notificarNovoTurno(int dia, int unidadeTempo) {
-        adicionarNotificacao("🕐 Novo período - Dia " + dia + ", Unidade " + unidadeTempo);
+        adicionarNotificacao("Novo período - Dia " + dia + ", Unidade " + unidadeTempo);
     }
 
     public void notificarAlerta(String mensagem) {
-        adicionarNotificacao("⚠️ ALERTA: " + mensagem);
+        adicionarNotificacao("ALERTA: " + mensagem);
     }
 }
