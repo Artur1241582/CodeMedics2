@@ -10,12 +10,9 @@ import Controller.GestorFicheiros;
 
 public class MenuGestao {
 
-    // Caminho fixo para os ficheiros
-    private static final String CAMINHO_FICHEIROS = "C:\\Users\\Lenovo\\OneDrive\\Documentos\\GitHub\\CodeMedics2\\Ficheiros";
-
     public static void mostrar(Scanner scanner, Configuracoes config, GestorNotificacoes gestorNotif) {
-        // Cria o gestor de ficheiros
-        GestorFicheiros gestorFicheiros = new GestorFicheiros(CAMINHO_FICHEIROS, config.getSeparador());
+        // Cria o gestor de ficheiros usando o caminho das configuracoes
+        GestorFicheiros gestorFicheiros = new GestorFicheiros(config.getCaminhoFicheiros(), config.getSeparador());
 
         boolean voltar = false;
 
