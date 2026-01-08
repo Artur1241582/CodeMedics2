@@ -190,7 +190,7 @@ public class Configuracoes {
      * Restaura todas as configurações para os valores padrão
      */
     public void restaurarPadrao() {
-        caminhoFicheiros = "./dados/";
+        caminhoFicheiros = "Ficheiros";
         separador = ";";
         tempoConsultaBaixa = 1;
         tempoConsultaMedia = 2;

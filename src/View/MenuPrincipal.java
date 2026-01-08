@@ -36,7 +36,7 @@ public class MenuPrincipal {
                     MenuGestao.mostrar(scanner, config, gestorNotif);
                     break;
                 case 2:
-                    // MenuFuncionamento.mostrar(scanner, config, gestorNotif);
+                    MenuFuncionamento.mostrar(scanner, config, gestorNotif);
                     break;
                 case 3:
                     // MenuEstatisticas.mostrar(scanner, config, gestorNotif);
