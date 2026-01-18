@@ -7,12 +7,29 @@ import Model.Configuracoes;
 import Controller.GestorNotificacoes;
 import Controller.GestorFicheiros;
 
+import Controller.medicoController;
+import Controller.especialidadeController;
+import Controller.sintomasController;
+import View.medicoView;
+import View.especialidadeView;
+import View.sintomasView;
+
 
 public class MenuGestao {
 
     public static void mostrar(Scanner scanner, Configuracoes config, GestorNotificacoes gestorNotif) {
         // Cria o gestor de ficheiros usando o caminho das configuracoes
         GestorFicheiros gestorFicheiros = new GestorFicheiros(config.getCaminhoFicheiros(), config.getSeparador());
+
+        // CRIAR OS CONTROLLERS
+        especialidadeController especialidadeCtrl = new especialidadeController(100);
+        medicoController medicoCtrl = new medicoController(100);
+        sintomasController sintomaCtrl = new sintomasController(100);
+
+        // CRIAR AS VIEWS
+        medicoView medicoV = new medicoView(medicoCtrl, especialidadeCtrl, scanner);
+        especialidadeView especialidadeV = new especialidadeView(especialidadeCtrl, scanner);
+        sintomasView sintomaV = new sintomasView(sintomaCtrl, especialidadeCtrl, scanner);
 
         boolean voltar = false;
 
@@ -33,13 +50,13 @@ public class MenuGestao {
 
             switch (opcao) {
                 case 1:
-                    menuMedicos(scanner, config, gestorNotif, gestorFicheiros);
+                    menuMedicos(scanner, config, gestorNotif, gestorFicheiros, medicoV);
                     break;
                 case 2:
-                    menuEspecialidades(scanner, config, gestorNotif, gestorFicheiros);
+                    menuEspecialidades(scanner, config, gestorNotif, gestorFicheiros, especialidadeV);
                     break;
                 case 3:
-                    menuSintomas(scanner, config, gestorNotif, gestorFicheiros);
+                    menuSintomas(scanner, config, gestorNotif, gestorFicheiros, sintomaV);
                     break;
                 case 4:
                     voltar = true;
@@ -48,7 +65,7 @@ public class MenuGestao {
         }
     }
 
-    private static void menuMedicos(Scanner scanner, Configuracoes config, GestorNotificacoes gestorNotif, GestorFicheiros gestorFicheiros) {
+    private static void menuMedicos(Scanner scanner, Configuracoes config, GestorNotificacoes gestorNotif, GestorFicheiros gestorFicheiros, medicoView medicoV) {
         boolean voltar = false;
 
         while (!voltar) {
@@ -70,28 +87,24 @@ public class MenuGestao {
 
             switch (opcao) {
                 case 1:
-                    // TODO: Aluno 1 - Implementar adicionarMedico()
-                    System.out.println("\n[FUNCIONALIDADE] Adicionar Médico");
-                    gestorNotif.adicionarLog("Tentativa de adicionar médico");
+                    medicoV.adicionar();
+                    gestorNotif.adicionarLog("Médico adicionado");
                     Utils.pausar(scanner);
                     break;
                 case 2:
-                    // Listar médicos do ficheiro
                     mostrarCabecalho(config);
-                    int numMedicos = gestorFicheiros.listarMedicos();
-                    gestorNotif.adicionarLog("Listados " + numMedicos + " médicos");
+                    medicoV.listar();
+                    gestorNotif.adicionarLog("Médicos listados");
                     Utils.pausar(scanner);
                     break;
                 case 3:
-                    // TODO: Aluno 1 - Implementar editarMedico()
-                    System.out.println("\n[FUNCIONALIDADE] Editar Médico");
-                    gestorNotif.adicionarLog("Tentativa de editar médico");
+                    medicoV.editar();
+                    gestorNotif.adicionarLog("Médico editado");
                     Utils.pausar(scanner);
                     break;
                 case 4:
-                    // TODO: Aluno 1 - Implementar removerMedico()
-                    System.out.println("\n[FUNCIONALIDADE] Remover Médico");
-                    gestorNotif.adicionarLog("Tentativa de remover médico");
+                    medicoV.remover();
+                    gestorNotif.adicionarLog("Médico removido");
                     Utils.pausar(scanner);
                     break;
                 case 5:
@@ -101,7 +114,7 @@ public class MenuGestao {
         }
     }
 
-    private static void menuEspecialidades(Scanner scanner, Configuracoes config, GestorNotificacoes gestorNotif, GestorFicheiros gestorFicheiros) {
+    private static void menuEspecialidades(Scanner scanner, Configuracoes config, GestorNotificacoes gestorNotif, GestorFicheiros gestorFicheiros, especialidadeView especialidadeV) {
         boolean voltar = false;
 
         while (!voltar) {
@@ -121,28 +134,24 @@ public class MenuGestao {
 
             switch (opcao) {
                 case 1:
-                    // TODO: Aluno 1 - Implementar adicionarEspecialidade()
-                    System.out.println("\n[FUNCIONALIDADE] Adicionar Especialidade");
-                    gestorNotif.adicionarLog("Tentativa de adicionar especialidade");
+                    especialidadeV.adicionar();
+                    gestorNotif.adicionarLog("Especialidade adicionada");
                     Utils.pausar(scanner);
                     break;
                 case 2:
-                    // Listar especialidades do ficheiro
                     mostrarCabecalho(config);
-                    int numEspecialidades = gestorFicheiros.listarEspecialidades();
-                    gestorNotif.adicionarLog("Listadas " + numEspecialidades + " especialidades");
+                    especialidadeV.listar();
+                    gestorNotif.adicionarLog("Especialidades listadas");
                     Utils.pausar(scanner);
                     break;
                 case 3:
-                    // TODO: Aluno 1 - Implementar editarEspecialidade()
-                    System.out.println("\n[FUNCIONALIDADE] Editar Especialidade");
-                    gestorNotif.adicionarLog("Tentativa de editar especialidade");
+                    especialidadeV.editar();
+                    gestorNotif.adicionarLog("Especialidade editada");
                     Utils.pausar(scanner);
                     break;
                 case 4:
-                    // TODO: Aluno 1 - Implementar removerEspecialidade()
-                    System.out.println("\n[FUNCIONALIDADE] Remover Especialidade");
-                    gestorNotif.adicionarLog("Tentativa de remover especialidade");
+                    especialidadeV.remover();
+                    gestorNotif.adicionarLog("Especialidade removida");
                     Utils.pausar(scanner);
                     break;
                 case 5:
@@ -152,7 +161,7 @@ public class MenuGestao {
         }
     }
 
-    private static void menuSintomas(Scanner scanner, Configuracoes config, GestorNotificacoes gestorNotif, GestorFicheiros gestorFicheiros) {
+    private static void menuSintomas(Scanner scanner, Configuracoes config, GestorNotificacoes gestorNotif, GestorFicheiros gestorFicheiros, sintomasView sintomaV) {
         boolean voltar = false;
 
         while (!voltar) {
@@ -173,33 +182,28 @@ public class MenuGestao {
 
             switch (opcao) {
                 case 1:
-                    // TODO: Aluno 1 - Implementar adicionarSintoma()
-                    System.out.println("\n[FUNCIONALIDADE] Adicionar Sintoma");
-                    gestorNotif.adicionarLog("Tentativa de adicionar sintoma");
+                    sintomaV.adicionar();
+                    gestorNotif.adicionarLog("Sintoma adicionado");
                     Utils.pausar(scanner);
                     break;
                 case 2:
-                    // Listar sintomas do ficheiro
                     mostrarCabecalho(config);
-                    int numSintomas = gestorFicheiros.listarSintomas();
-                    gestorNotif.adicionarLog("Listados " + numSintomas + " sintomas");
+                    sintomaV.listar();
+                    gestorNotif.adicionarLog("Sintomas listados");
                     Utils.pausar(scanner);
                     break;
                 case 3:
-                    // TODO: Aluno 1 - Implementar editarSintoma()
-                    System.out.println("\n[FUNCIONALIDADE] Editar Sintoma");
-                    gestorNotif.adicionarLog("Tentativa de editar sintoma");
+                    sintomaV.editar();
+                    gestorNotif.adicionarLog("Sintoma editado");
                     Utils.pausar(scanner);
                     break;
                 case 4:
-                    // TODO: Aluno 1 - Implementar removerSintoma()
-                    System.out.println("\n[FUNCIONALIDADE] Remover Sintoma");
-                    gestorNotif.adicionarLog("Tentativa de remover sintoma");
+                    sintomaV.remover();
+                    gestorNotif.adicionarLog("Sintoma removido");
                     Utils.pausar(scanner);
                     break;
                 case 5:
-                    // TODO: Aluno 1 - Implementar pesquisaSintomaInovadora()
-                    System.out.println("\n[FUNCIONALIDADE] Pesquisa Inovadora de Sintomas");
+                    sintomaV.pesquisar();
                     Utils.pausar(scanner);
                     break;
                 case 6:
