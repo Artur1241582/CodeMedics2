@@ -13,38 +13,13 @@ public class medicoView {
     private especialidadeController especialidadeCtrl;
     private Scanner sc;
 
-    public medicoView(medicoController medicoCtrl, especialidadeController especialidadeCtrl) {
+    public medicoView(medicoController medicoCtrl, especialidadeController especialidadeCtrl, Scanner sc) {
         this.medicoCtrl = medicoCtrl;
         this.especialidadeCtrl = especialidadeCtrl;
-        sc = new Scanner(System.in);
+        this.sc = sc;
     }
 
-    public void menu() {
-        int opcao;
-        do {
-            System.out.println("\n=== GESTÃO DE MÉDICOS ===");
-            System.out.println("1. Adicionar médico");
-            System.out.println("2. Listar médicos");
-            System.out.println("3. Atualizar hora de saída");
-            System.out.println("4. Remover médico");
-            System.out.println("0. Voltar");
-            System.out.print("Opção: ");
-
-            opcao = sc.nextInt();
-            sc.nextLine(); // Limpar buffer
-
-            switch (opcao) {
-                case 1 -> adicionar();
-                case 2 -> listar();
-                case 3 -> atualizarHoraSaida();
-                case 4 -> remover();
-                case 0 -> System.out.println("A voltar ao menu principal...");
-                default -> System.out.println("Opção inválida!");
-            }
-        } while (opcao != 0);
-    }
-
-    private void adicionar() {
+    public void adicionar() {
         System.out.println("\n--- ADICIONAR MÉDICO ---");
 
         System.out.print("Nome: ");
@@ -87,13 +62,13 @@ public class medicoView {
         medicoModel m = new medicoModel(nome, esp, horaEntrada, horaSaida, valorHora);
 
         if (medicoCtrl.adicionarMedico(m)) {
-            System.out.println("Médico adicionado com sucesso!");
+            System.out.println("✓ Médico adicionado com sucesso!");
         } else {
-            System.out.println("Erro: Não foi possível adicionar o médico (limite atingido).");
+            System.out.println("✗ Erro: Não foi possível adicionar o médico (limite atingido).");
         }
     }
 
-    private void listar() {
+    public void listar() {
         System.out.println("\n--- LISTA DE MÉDICOS ---");
 
         medicoModel[] medicos = medicoCtrl.listarMedicos();
@@ -110,29 +85,89 @@ public class medicoView {
         System.out.println("\nTotal: " + medicos.length + " médico(s)");
     }
 
-    private void atualizarHoraSaida() {
-        System.out.println("\n--- ATUALIZAR HORA DE SAÍDA ---");
+    public void editar() {
+        System.out.println("\n--- EDITAR MÉDICO ---");
 
         System.out.print("Nome do médico: ");
         String nome = sc.nextLine();
 
-        System.out.print("Nova hora de saída (0-23): ");
-        int novaHora = sc.nextInt();
+        medicoModel medico = medicoCtrl.buscarMedicoPorNome(nome);
+
+        if (medico == null) {
+            System.out.println("✗ Médico não encontrado.");
+            return;
+        }
+
+        System.out.println("\nDados atuais: " + medico);
+        System.out.println("\n1. Editar hora de saída");
+        System.out.println("2. Editar todos os dados");
+        System.out.print("Escolha: ");
+
+        int opcao = sc.nextInt();
         sc.nextLine();
 
-        if (medicoCtrl.atualizarHoraSaida(nome, novaHora)) {
-            System.out.println("Hora de saída atualizada com sucesso!");
-        } else {
-            System.out.println("Erro: Médico não encontrado.");
+        if (opcao == 1) {
+            System.out.print("Nova hora de saída (0-23): ");
+            int novaHora = sc.nextInt();
+            sc.nextLine();
+
+            if (medicoCtrl.atualizarHoraSaida(nome, novaHora)) {
+                System.out.println("Hora de saída atualizada com sucesso!");
+            } else {
+                System.out.println("Erro ao atualizar.");
+            }
+        } else if (opcao == 2) {
+            // Editar todos os dados
+            System.out.print("Novo nome: ");
+            String novoNome = sc.nextLine();
+
+            // Listar especialidades
+            especialidadeModel[] especialidades = especialidadeCtrl.getEspecialidades();
+            System.out.println("\nEspecialidades disponíveis:");
+            for (int i = 0; i < especialidades.length; i++) {
+                System.out.println((i + 1) + ". " + especialidades[i]);
+            }
+
+            System.out.print("Escolha a especialidade: ");
+            int escolha = sc.nextInt();
+            sc.nextLine();
+
+            especialidadeModel esp = especialidades[escolha - 1];
+
+            System.out.print("Nova hora de entrada (0-23): ");
+            int horaEntrada = sc.nextInt();
+
+            System.out.print("Nova hora de saída (0-23): ");
+            int horaSaida = sc.nextInt();
+
+            System.out.print("Novo valor por hora (€): ");
+            double valorHora = sc.nextDouble();
+            sc.nextLine();
+
+            medicoModel medicoAtualizado = new medicoModel(novoNome, esp, horaEntrada, horaSaida, valorHora);
+
+            if (medicoCtrl.atualizarMedico(nome, medicoAtualizado)) {
+                System.out.println("Médico atualizado com sucesso!");
+            } else {
+                System.out.println("Erro ao atualizar.");
+            }
         }
     }
 
-    private void remover() {
+    public void remover() {
         System.out.println("\n--- REMOVER MÉDICO ---");
 
         System.out.print("Nome do médico: ");
         String nome = sc.nextLine();
 
+        medicoModel medico = medicoCtrl.buscarMedicoPorNome(nome);
+
+        if (medico == null) {
+            System.out.println("Médico não encontrado.");
+            return;
+        }
+
+        System.out.println("\nDados: " + medico);
         System.out.print("Tem certeza? (S/N): ");
         String confirmacao = sc.nextLine();
 
@@ -140,7 +175,7 @@ public class medicoView {
             if (medicoCtrl.removerMedico(nome)) {
                 System.out.println("Médico removido com sucesso!");
             } else {
-                System.out.println("Erro: Médico não encontrado.");
+                System.out.println("Erro ao remover.");
             }
         } else {
             System.out.println("Operação cancelada.");

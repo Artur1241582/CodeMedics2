@@ -8,39 +8,12 @@ public class especialidadeView {
     private especialidadeController controller;
     private Scanner sc;
 
-    public especialidadeView(especialidadeController controller) {
+    public especialidadeView(especialidadeController controller, Scanner sc) {
         this.controller = controller;
-        sc = new Scanner(System.in);
+        this.sc = sc;
     }
 
-    public void menu() {
-        int opcao;
-
-        do {
-            System.out.println("\n=== GESTÃO DE ESPECIALIDADES ===");
-            System.out.println("1. Adicionar especialidade");
-            System.out.println("2. Listar especialidades");
-            System.out.println("3. Atualizar especialidade");
-            System.out.println("4. Remover especialidade");
-            System.out.println("0. Voltar");
-            System.out.print("Opção: ");
-
-            opcao = sc.nextInt();
-            sc.nextLine(); // Limpar buffer
-
-            switch (opcao) {
-                case 1 -> adicionar();
-                case 2 -> listar();
-                case 3 -> atualizar();
-                case 4 -> remover();
-                case 0 -> System.out.println("A voltar ao menu principal...");
-                default -> System.out.println("Opção inválida!");
-            }
-
-        } while (opcao != 0);
-    }
-
-    private void adicionar() {
+    public void adicionar() {
         System.out.println("\n--- ADICIONAR ESPECIALIDADE ---");
 
         System.out.print("Código: ");
@@ -56,7 +29,7 @@ public class especialidadeView {
         }
     }
 
-    private void listar() {
+    public void listar() {
         System.out.println("\n--- LISTA DE ESPECIALIDADES ---");
 
         especialidadeModel[] lista = controller.getEspecialidades();
@@ -74,13 +47,12 @@ public class especialidadeView {
         System.out.println("Total: " + lista.length + " especialidade(s)");
     }
 
-    private void atualizar() {
-        System.out.println("\n--- ATUALIZAR ESPECIALIDADE ---");
+    public void editar() {
+        System.out.println("\n--- EDITAR ESPECIALIDADE ---");
 
         System.out.print("Código da especialidade: ");
         String codigo = sc.nextLine().toUpperCase();
 
-        // Verificar se existe antes de pedir novo nome
         especialidadeModel esp = controller.procurarPorCodigo(codigo);
         if (esp == null) {
             System.out.println("Especialidade não encontrada.");
@@ -98,13 +70,12 @@ public class especialidadeView {
         }
     }
 
-    private void remover() {
+    public void remover() {
         System.out.println("\n--- REMOVER ESPECIALIDADE ---");
 
         System.out.print("Código da especialidade: ");
         String codigo = sc.nextLine().toUpperCase();
 
-        // Mostrar dados antes de confirmar
         especialidadeModel esp = controller.procurarPorCodigo(codigo);
         if (esp == null) {
             System.out.println("Especialidade não encontrada.");
