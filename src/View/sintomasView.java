@@ -1,9 +1,9 @@
-package view;
+package View;
 
-import controller.sintomasController;
-import controller.especialidadeController;
-import model.especialidadeModel;
-import model.sintomasModel;
+import Controller.sintomasController;
+import Controller.especialidadeController;
+import Model.especialidadeModel;
+import Model.sintomasModel;
 
 import java.util.Scanner;
 

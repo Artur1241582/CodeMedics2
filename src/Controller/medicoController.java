@@ -1,7 +1,6 @@
-package controller;
+package Controller;
 
-import model.medicoModel;
-import model.especialidadeModel;
+import Model.medicoModel;
 
 public class medicoController {
 

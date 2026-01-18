@@ -1,5 +1,5 @@
-package controller;
-import model.especialidadeModel;
+package Controller;
+import Model.especialidadeModel;
 
 public class especialidadeController {
     private especialidadeModel[] especialidades;

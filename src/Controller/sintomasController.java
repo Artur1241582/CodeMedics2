@@ -1,7 +1,7 @@
-package controller;
+package Controller;
 
-import model.sintomasModel;
-import model.especialidadeModel;
+import Model.sintomasModel;
+import Model.especialidadeModel;
 
 public class sintomasController {
     private sintomasModel[] sintomas;

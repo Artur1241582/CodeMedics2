@@ -1,6 +1,6 @@
-package view;
-import controller.especialidadeController;
-import model.especialidadeModel;
+package View;
+import Controller.especialidadeController;
+import Model.especialidadeModel;
 
 import java.util.Scanner;
 

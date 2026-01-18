@@ -1,9 +1,9 @@
-package view;
+package View;
 
-import controller.medicoController;
-import controller.especialidadeController;
-import model.medicoModel;
-import model.especialidadeModel;
+import Controller.medicoController;
+import Controller.especialidadeController;
+import Model.medicoModel;
+import Model.especialidadeModel;
 
 import java.util.Scanner;
 
