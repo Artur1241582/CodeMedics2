@@ -5,6 +5,7 @@ import Model.*;
 /**
  * Controlador principal do funcionamento dia-a-dia do hospital
  * Gere pacientes, medicos, triagem, encaminhamento e tempo
+ * Integra-se com os CRUDs para sincronizacao de dados
  * Responsabilidade: Aluno 2/3
  */
 public class GestorHospital {
@@ -19,6 +20,18 @@ public class GestorHospital {
     private Medico[] medicos;
     private int numMedicos;
 
+    // Especialidades (novo - para integracao)
+    private Especialidade[] especialidades;
+    private int numEspecialidades;
+
+    // Sintomas (novo - para integracao)
+    private Sintoma[] sintomas;
+    private int numSintomas;
+
+    // Dados legados (mantidos para compatibilidade com triagem)
+    private String[] dadosSintomas;
+    private String[] dadosEspecialidades;
+
     // Fila de espera
     private FilaEspera filaEspera;
 
@@ -26,16 +39,11 @@ public class GestorHospital {
     private Paciente[] pacientesAtendidos;
     private int numPacientesAtendidos;
 
-    // Dados do sistema
-    private String[] dadosSintomas;
-    private int numSintomas;
-    private String[] dadosEspecialidades;
-    private int numEspecialidades;
-
     // Referencias
     private Configuracoes config;
     private GestorNotificacoes notificacoes;
     private GestorFicheiros gestorFicheiros;
+    private GestorEstatisticas gestorEstatisticas;
 
     /**
      * Construtor do gestor de hospital
@@ -52,16 +60,19 @@ public class GestorHospital {
         this.medicos = new Medico[MAX_MEDICOS];
         this.numMedicos = 0;
 
+        this.especialidades = new Especialidade[MAX_ESPECIALIDADES];
+        this.numEspecialidades = 0;
+
+        this.sintomas = new Sintoma[MAX_SINTOMAS];
+        this.numSintomas = 0;
+
         this.filaEspera = new FilaEspera(100);
 
         this.pacientesAtendidos = new Paciente[MAX_PACIENTES_ATENDIDOS];
         this.numPacientesAtendidos = 0;
 
         this.dadosSintomas = new String[MAX_SINTOMAS];
-        this.numSintomas = 0;
-
         this.dadosEspecialidades = new String[MAX_ESPECIALIDADES];
-        this.numEspecialidades = 0;
 
         // Carrega dados iniciais
         carregarDados();
@@ -74,8 +85,8 @@ public class GestorHospital {
      */
     public void carregarDados() {
         carregarMedicos();
-        carregarSintomas();
         carregarEspecialidades();
+        carregarSintomas();
         atualizarPresencaMedicos();
     }
 
@@ -97,23 +108,6 @@ public class GestorHospital {
     }
 
     /**
-     * Carrega os sintomas do ficheiro
-     */
-    private void carregarSintomas() {
-        String[] linhas = gestorFicheiros.carregarSintomas(MAX_SINTOMAS);
-        numSintomas = 0;
-
-        for (int i = 0; i < linhas.length; i++) {
-            if (linhas[i] != null && !linhas[i].isEmpty()) {
-                dadosSintomas[numSintomas] = linhas[i];
-                numSintomas++;
-            }
-        }
-
-        notificacoes.adicionarLog("Carregados " + numSintomas + " sintomas");
-    }
-
-    /**
      * Carrega as especialidades do ficheiro
      */
     private void carregarEspecialidades() {
@@ -122,12 +116,241 @@ public class GestorHospital {
 
         for (int i = 0; i < linhas.length; i++) {
             if (linhas[i] != null && !linhas[i].isEmpty()) {
+                especialidades[numEspecialidades] = Especialidade.fromFicheiro(linhas[i], config.getSeparador());
                 dadosEspecialidades[numEspecialidades] = linhas[i];
                 numEspecialidades++;
             }
         }
 
         notificacoes.adicionarLog("Carregadas " + numEspecialidades + " especialidades");
+    }
+
+    /**
+     * Carrega os sintomas do ficheiro
+     */
+    private void carregarSintomas() {
+        String[] linhas = gestorFicheiros.carregarSintomas(MAX_SINTOMAS);
+        numSintomas = 0;
+
+        for (int i = 0; i < linhas.length; i++) {
+            if (linhas[i] != null && !linhas[i].isEmpty()) {
+                sintomas[numSintomas] = new Sintoma(linhas[i], config.getSeparador());
+                dadosSintomas[numSintomas] = linhas[i];
+                numSintomas++;
+            }
+        }
+
+        notificacoes.adicionarLog("Carregados " + numSintomas + " sintomas");
+    }
+
+    // ==================== METODOS CRUD PARA MEDICOS ====================
+
+    /**
+     * Adiciona um medico ao sistema
+     * @param medico Medico a adicionar
+     * @return true se adicionou com sucesso
+     */
+    public boolean adicionarMedico(Medico medico) {
+        if (medico == null || numMedicos >= MAX_MEDICOS) {
+            return false;
+        }
+
+        medicos[numMedicos++] = medico;
+        guardarMedicos();
+        notificacoes.adicionarLog("Medico adicionado: " + medico.getNome());
+        return true;
+    }
+
+    /**
+     * Atualiza um medico no sistema
+     * @param medico Medico atualizado
+     */
+    public void atualizarMedico(Medico medico) {
+        guardarMedicos();
+        notificacoes.adicionarLog("Medico atualizado: " + medico.getNome());
+    }
+
+    /**
+     * Remove um medico do sistema
+     * @param nome Nome do medico a remover
+     * @return true se removeu com sucesso
+     */
+    public boolean removerMedico(String nome) {
+        for (int i = 0; i < numMedicos; i++) {
+            if (medicos[i].getNome().equalsIgnoreCase(nome)) {
+                // Shift dos elementos
+                for (int j = i; j < numMedicos - 1; j++) {
+                    medicos[j] = medicos[j + 1];
+                }
+                medicos[--numMedicos] = null;
+                guardarMedicos();
+                notificacoes.adicionarLog("Medico removido: " + nome);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ==================== METODOS CRUD PARA ESPECIALIDADES ====================
+
+    /**
+     * Adiciona uma especialidade ao sistema
+     * @param especialidade Especialidade a adicionar
+     * @return true se adicionou com sucesso
+     */
+    public boolean adicionarEspecialidade(Especialidade especialidade) {
+        if (especialidade == null || numEspecialidades >= MAX_ESPECIALIDADES) {
+            return false;
+        }
+
+        especialidades[numEspecialidades] = especialidade;
+        dadosEspecialidades[numEspecialidades] = especialidade.toFicheiroString(config.getSeparador());
+        numEspecialidades++;
+        guardarEspecialidades();
+        notificacoes.adicionarLog("Especialidade adicionada: " + especialidade.getNome());
+        return true;
+    }
+
+    /**
+     * Atualiza uma especialidade no sistema
+     * @param especialidade Especialidade atualizada
+     */
+    public void atualizarEspecialidade(Especialidade especialidade) {
+        // Atualizar dados legados
+        for (int i = 0; i < numEspecialidades; i++) {
+            if (especialidades[i].getCodigo().equalsIgnoreCase(especialidade.getCodigo())) {
+                dadosEspecialidades[i] = especialidade.toFicheiroString(config.getSeparador());
+                break;
+            }
+        }
+        guardarEspecialidades();
+        notificacoes.adicionarLog("Especialidade atualizada: " + especialidade.getNome());
+    }
+
+    /**
+     * Remove uma especialidade do sistema
+     * @param codigo Codigo da especialidade a remover
+     * @return true se removeu com sucesso
+     */
+    public boolean removerEspecialidade(String codigo) {
+        for (int i = 0; i < numEspecialidades; i++) {
+            if (especialidades[i].getCodigo().equalsIgnoreCase(codigo)) {
+                // Shift dos elementos
+                for (int j = i; j < numEspecialidades - 1; j++) {
+                    especialidades[j] = especialidades[j + 1];
+                    dadosEspecialidades[j] = dadosEspecialidades[j + 1];
+                }
+                especialidades[--numEspecialidades] = null;
+                dadosEspecialidades[numEspecialidades] = null;
+                guardarEspecialidades();
+                notificacoes.adicionarLog("Especialidade removida: " + codigo);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ==================== METODOS CRUD PARA SINTOMAS ====================
+
+    /**
+     * Adiciona um sintoma ao sistema
+     * @param sintoma Sintoma a adicionar
+     * @return true se adicionou com sucesso
+     */
+    public boolean adicionarSintoma(Sintoma sintoma) {
+        if (sintoma == null || numSintomas >= MAX_SINTOMAS) {
+            return false;
+        }
+
+        sintomas[numSintomas] = sintoma;
+        dadosSintomas[numSintomas] = sintoma.toFicheiroString(config.getSeparador());
+        numSintomas++;
+        guardarSintomas();
+        notificacoes.adicionarLog("Sintoma adicionado: " + sintoma.getNome());
+        return true;
+    }
+
+    /**
+     * Atualiza um sintoma no sistema
+     * @param sintoma Sintoma atualizado
+     */
+    public void atualizarSintoma(Sintoma sintoma) {
+        // Atualizar dados legados
+        for (int i = 0; i < numSintomas; i++) {
+            if (sintomas[i].getNome().equalsIgnoreCase(sintoma.getNome())) {
+                dadosSintomas[i] = sintoma.toFicheiroString(config.getSeparador());
+                break;
+            }
+        }
+        guardarSintomas();
+        notificacoes.adicionarLog("Sintoma atualizado: " + sintoma.getNome());
+    }
+
+    /**
+     * Remove um sintoma do sistema
+     * @param nome Nome do sintoma a remover
+     * @return true se removeu com sucesso
+     */
+    public boolean removerSintoma(String nome) {
+        for (int i = 0; i < numSintomas; i++) {
+            if (sintomas[i].getNome().equalsIgnoreCase(nome)) {
+                // Shift dos elementos
+                for (int j = i; j < numSintomas - 1; j++) {
+                    sintomas[j] = sintomas[j + 1];
+                    dadosSintomas[j] = dadosSintomas[j + 1];
+                }
+                sintomas[--numSintomas] = null;
+                dadosSintomas[numSintomas] = null;
+                guardarSintomas();
+                notificacoes.adicionarLog("Sintoma removido: " + nome);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ==================== PERSISTENCIA ====================
+
+    /**
+     * Guarda os medicos no ficheiro
+     */
+    public void guardarMedicos() {
+        String[] dados = new String[numMedicos];
+        for (int i = 0; i < numMedicos; i++) {
+            dados[i] = medicos[i].toFicheiroString(config.getSeparador());
+        }
+        gestorFicheiros.guardarDados("medicos.txt", dados, numMedicos);
+    }
+
+    /**
+     * Guarda as especialidades no ficheiro
+     */
+    public void guardarEspecialidades() {
+        String[] dados = new String[numEspecialidades];
+        for (int i = 0; i < numEspecialidades; i++) {
+            dados[i] = especialidades[i].toFicheiroString(config.getSeparador());
+        }
+        gestorFicheiros.guardarDados("especialidades.txt", dados, numEspecialidades);
+    }
+
+    /**
+     * Guarda os sintomas no ficheiro
+     */
+    public void guardarSintomas() {
+        String[] dados = new String[numSintomas];
+        for (int i = 0; i < numSintomas; i++) {
+            dados[i] = sintomas[i].toFicheiroString(config.getSeparador());
+        }
+        gestorFicheiros.guardarDados("sintomas.txt", dados, numSintomas);
+    }
+
+    /**
+     * Guarda todos os dados
+     */
+    public void guardarTudo() {
+        guardarMedicos();
+        guardarEspecialidades();
+        guardarSintomas();
     }
 
     // ==================== REGISTO DE PACIENTES ====================
@@ -352,6 +575,15 @@ public class GestorHospital {
                             numPacientesAtendidos++;
                         }
 
+                        // Regista estatisticas
+                        if (gestorEstatisticas != null) {
+                            gestorEstatisticas.registarSintomasPaciente(pacienteAtendido);
+                            if (pacienteAtendido.getEspecialidadeSugerida() != null) {
+                                gestorEstatisticas.registarEspecialidadePaciente(
+                                    pacienteAtendido.getEspecialidadeSugerida());
+                            }
+                        }
+
                         notificacoes.notificarPacienteAtendido(pacienteAtendido.getNome(),
                                                                medicos[i].getNome());
                     }
@@ -419,6 +651,14 @@ public class GestorHospital {
      * Processa a mudanca de dia
      */
     private void processarMudancaDia() {
+        // Regista estatisticas do dia anterior
+        if (gestorEstatisticas != null && numPacientesAtendidos > 0) {
+            int diaAnterior = config.getDiaAtual() - 1;
+            if (diaAnterior > 0) {
+                gestorEstatisticas.registarAtendimentosDia(diaAnterior, numPacientesAtendidos);
+            }
+        }
+
         // Reset do contador de pacientes atendidos
         numPacientesAtendidos = 0;
         notificacoes.adicionarLog("Novo dia iniciado: Dia " + config.getDiaAtual());
@@ -564,8 +804,7 @@ public class GestorHospital {
     public String[] obterNomesSintomas() {
         String[] nomes = new String[numSintomas];
         for (int i = 0; i < numSintomas; i++) {
-            String[] partes = dadosSintomas[i].split(config.getSeparador());
-            nomes[i] = partes[0].trim();
+            nomes[i] = sintomas[i].getNome();
         }
         return nomes;
     }
@@ -596,6 +835,34 @@ public class GestorHospital {
         return dadosSintomas;
     }
 
+    public String[] getDadosEspecialidades() {
+        return dadosEspecialidades;
+    }
+
+    public int getNumEspecialidades() {
+        return numEspecialidades;
+    }
+
+    public Especialidade[] getEspecialidades() {
+        Especialidade[] resultado = new Especialidade[numEspecialidades];
+        for (int i = 0; i < numEspecialidades; i++) {
+            resultado[i] = especialidades[i];
+        }
+        return resultado;
+    }
+
+    public Sintoma[] getSintomas() {
+        Sintoma[] resultado = new Sintoma[numSintomas];
+        for (int i = 0; i < numSintomas; i++) {
+            resultado[i] = sintomas[i];
+        }
+        return resultado;
+    }
+
+    public String getSeparador() {
+        return config.getSeparador();
+    }
+
     public int getNumPacientesAtendidos() {
         return numPacientesAtendidos;
     }
@@ -616,6 +883,26 @@ public class GestorHospital {
             return null;
         }
         return medicos[indice];
+    }
+
+    public Configuracoes getConfig() {
+        return config;
+    }
+
+    public GestorFicheiros getGestorFicheiros() {
+        return gestorFicheiros;
+    }
+
+    public GestorNotificacoes getNotificacoes() {
+        return notificacoes;
+    }
+
+    public void setGestorEstatisticas(GestorEstatisticas gestorEstatisticas) {
+        this.gestorEstatisticas = gestorEstatisticas;
+    }
+
+    public GestorEstatisticas getGestorEstatisticas() {
+        return gestorEstatisticas;
     }
 
     // ==================== UTILIDADES ====================

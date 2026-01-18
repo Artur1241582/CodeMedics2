@@ -8,24 +8,19 @@ import Utils.Utils;
 /**
  * Menu de funcionamento do hospital (opcao 2 do menu principal)
  * Gere o dia-a-dia: registo de pacientes, triagem, encaminhamento e tempo
+ * Recebe o GestorHospital centralizado (nao cria o seu proprio)
  * Responsabilidade: Aluno 2/3
  */
 public class MenuFuncionamento {
-
-    private static GestorHospital gestorHospital;
 
     /**
      * Mostra o menu de funcionamento do hospital
      * @param scanner Scanner para input
      * @param config Configuracoes do sistema
      * @param gestorNotif Gestor de notificacoes
+     * @param gestorHospital GestorHospital centralizado (compartilhado)
      */
-    public static void mostrar(Scanner scanner, Configuracoes config, GestorNotificacoes gestorNotif) {
-        // Inicializa o gestor do hospital
-        GestorFicheiros gestorFicheiros = new GestorFicheiros(config.getCaminhoFicheiros(),
-                                                              config.getSeparador());
-        gestorHospital = new GestorHospital(config, gestorNotif, gestorFicheiros);
-
+    public static void mostrar(Scanner scanner, Configuracoes config, GestorNotificacoes gestorNotif, GestorHospital gestorHospital) {
         boolean voltar = false;
 
         while (!voltar) {
@@ -36,19 +31,19 @@ public class MenuFuncionamento {
 
             switch (opcao) {
                 case 1:
-                    registarPaciente(scanner, config, gestorNotif);
+                    registarPaciente(scanner, config, gestorNotif, gestorHospital);
                     break;
                 case 2:
-                    verFilaEspera(scanner);
+                    verFilaEspera(scanner, gestorHospital);
                     break;
                 case 3:
-                    menuEncaminhamento(scanner, config, gestorNotif);
+                    menuEncaminhamento(scanner, config, gestorNotif, gestorHospital);
                     break;
                 case 4:
-                    avancarTempo(scanner, config);
+                    avancarTempo(scanner, config, gestorHospital);
                     break;
                 case 5:
-                    verEstadoHospital(scanner);
+                    verEstadoHospital(scanner, gestorHospital);
                     break;
                 case 6:
                     voltar = true;
@@ -80,7 +75,7 @@ public class MenuFuncionamento {
      * Processo de registo de um novo paciente
      */
     private static void registarPaciente(Scanner scanner, Configuracoes config,
-                                          GestorNotificacoes gestorNotif) {
+                                          GestorNotificacoes gestorNotif, GestorHospital gestorHospital) {
         mostrarCabecalho(config);
         System.out.println("\n┌────────────────────────────────────────────────────────────┐");
         System.out.println("│                   REGISTAR PACIENTE                        │");
@@ -89,11 +84,17 @@ public class MenuFuncionamento {
         // Pede o nome
         String nome = Utils.lerTexto(scanner, "Nome do paciente: ");
 
+        if (nome.trim().isEmpty()) {
+            System.out.println("Nome invalido!");
+            Utils.pausar(scanner);
+            return;
+        }
+
         // Cria o paciente
         Paciente paciente = gestorHospital.registarPaciente(nome);
 
         // Selecao de sintomas
-        selecionarSintomas(scanner, paciente);
+        selecionarSintomas(scanner, paciente, gestorHospital);
 
         if (paciente.getNumSintomas() == 0) {
             System.out.println("\nNenhum sintoma selecionado. Paciente nao foi registado.");
@@ -131,9 +132,15 @@ public class MenuFuncionamento {
     /**
      * Interface para selecao de sintomas
      */
-    private static void selecionarSintomas(Scanner scanner, Paciente paciente) {
+    private static void selecionarSintomas(Scanner scanner, Paciente paciente, GestorHospital gestorHospital) {
         String[] nomesSintomas = gestorHospital.obterNomesSintomas();
         int numSintomas = gestorHospital.getNumSintomas();
+
+        if (numSintomas == 0) {
+            System.out.println("\nNao existem sintomas registados no sistema!");
+            System.out.println("Por favor, adicione sintomas primeiro no Menu de Gestao.");
+            return;
+        }
 
         boolean continuar = true;
         int paginaAtual = 0;
@@ -226,7 +233,7 @@ public class MenuFuncionamento {
     /**
      * Mostra a fila de espera
      */
-    private static void verFilaEspera(Scanner scanner) {
+    private static void verFilaEspera(Scanner scanner, GestorHospital gestorHospital) {
         gestorHospital.listarFilaEspera();
         Utils.pausar(scanner);
     }
@@ -237,7 +244,7 @@ public class MenuFuncionamento {
      * Menu de encaminhamento de pacientes
      */
     private static void menuEncaminhamento(Scanner scanner, Configuracoes config,
-                                            GestorNotificacoes gestorNotif) {
+                                            GestorNotificacoes gestorNotif, GestorHospital gestorHospital) {
         boolean voltar = false;
 
         while (!voltar) {
@@ -255,10 +262,10 @@ public class MenuFuncionamento {
 
             switch (opcao) {
                 case 1:
-                    encaminhamentoAutomatico(scanner);
+                    encaminhamentoAutomatico(scanner, gestorHospital);
                     break;
                 case 2:
-                    encaminhamentoManual(scanner, config);
+                    encaminhamentoManual(scanner, config, gestorHospital);
                     break;
                 case 3:
                     voltar = true;
@@ -270,7 +277,7 @@ public class MenuFuncionamento {
     /**
      * Realiza encaminhamento automatico
      */
-    private static void encaminhamentoAutomatico(Scanner scanner) {
+    private static void encaminhamentoAutomatico(Scanner scanner, GestorHospital gestorHospital) {
         System.out.println("\n--- ENCAMINHAMENTO AUTOMATICO ---");
 
         if (gestorHospital.getFilaEspera().estaVazia()) {
@@ -306,7 +313,7 @@ public class MenuFuncionamento {
     /**
      * Realiza encaminhamento manual
      */
-    private static void encaminhamentoManual(Scanner scanner, Configuracoes config) {
+    private static void encaminhamentoManual(Scanner scanner, Configuracoes config, GestorHospital gestorHospital) {
         mostrarCabecalho(config);
         System.out.println("\n--- ENCAMINHAMENTO MANUAL ---");
 
@@ -380,7 +387,7 @@ public class MenuFuncionamento {
     /**
      * Avanca o tempo e mostra eventos
      */
-    private static void avancarTempo(Scanner scanner, Configuracoes config) {
+    private static void avancarTempo(Scanner scanner, Configuracoes config, GestorHospital gestorHospital) {
         System.out.println("\n--- AVANCAR TEMPO ---");
         System.out.println("Tempo atual: Dia " + config.getDiaAtual() +
                            ", Unidade " + config.getUnidadeTempoAtual() + "/24");
@@ -401,7 +408,7 @@ public class MenuFuncionamento {
     /**
      * Mostra o estado atual do hospital
      */
-    private static void verEstadoHospital(Scanner scanner) {
+    private static void verEstadoHospital(Scanner scanner, GestorHospital gestorHospital) {
         gestorHospital.listarEstadoHospital();
         Utils.pausar(scanner);
     }
