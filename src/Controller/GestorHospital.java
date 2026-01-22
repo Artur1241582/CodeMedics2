@@ -6,7 +6,6 @@ import Model.*;
  * Controlador principal do funcionamento dia-a-dia do hospital
  * Gere pacientes, medicos, triagem, encaminhamento e tempo
  * Integra-se com os CRUDs para sincronizacao de dados
- * Responsabilidade: Aluno 2/3
  */
 public class GestorHospital {
 
@@ -96,15 +95,41 @@ public class GestorHospital {
     private void carregarMedicos() {
         String[] linhas = gestorFicheiros.carregarMedicos(MAX_MEDICOS);
         numMedicos = 0;
+        int linhasComErro = 0;
 
         for (int i = 0; i < linhas.length; i++) {
-            if (linhas[i] != null && !linhas[i].isEmpty()) {
-                medicos[numMedicos] = new Medico(linhas[i], config.getSeparador());
-                numMedicos++;
+            if (linhas[i] != null && !linhas[i].trim().isEmpty()) {
+                // Ignora linhas de comentário
+                if (linhas[i].trim().startsWith("#")) {
+                    continue;
+                }
+
+                try {
+                    medicos[numMedicos] = new Medico(linhas[i], config.getSeparador());
+                    numMedicos++;
+                } catch (IllegalArgumentException e) {
+                    linhasComErro++;
+                    System.err.println("ERRO ao carregar médico (linha " + (i + 1) + "): " + e.getMessage());
+                    notificacoes.adicionarLog("ERRO ao carregar médico na linha " + (i + 1));
+                } catch (Exception e) {
+                    linhasComErro++;
+                    System.err.println("ERRO inesperado ao processar médico (linha " + (i + 1) + "): " + linhas[i]);
+                    e.printStackTrace();
+                }
             }
         }
 
-        notificacoes.adicionarLog("Carregados " + numMedicos + " medicos");
+        if (linhasComErro > 0) {
+            notificacoes.adicionarLog("AVISO: " + linhasComErro + " linha(s) com erro no ficheiro de médicos");
+            System.err.println("\n╔════════════════════════════════════════════════════════════╗");
+            System.err.println("║  ATENÇÃO: Foram encontrados erros no ficheiro de médicos  ║");
+            System.err.println("║  Verifique o formato das linhas no ficheiro medicos.txt   ║");
+            System.err.println("║  Formato esperado:                                         ║");
+            System.err.println("║  Nome;Especialidade;HoraEntrada;HoraSaida;ValorHora       ║");
+            System.err.println("╚════════════════════════════════════════════════════════════╝\n");
+        }
+
+        notificacoes.adicionarLog("Carregados " + numMedicos + " médico(s)");
     }
 
     /**
@@ -113,16 +138,35 @@ public class GestorHospital {
     private void carregarEspecialidades() {
         String[] linhas = gestorFicheiros.carregarEspecialidades(MAX_ESPECIALIDADES);
         numEspecialidades = 0;
+        int linhasComErro = 0;
 
         for (int i = 0; i < linhas.length; i++) {
-            if (linhas[i] != null && !linhas[i].isEmpty()) {
-                especialidades[numEspecialidades] = Especialidade.fromFicheiro(linhas[i], config.getSeparador());
-                dadosEspecialidades[numEspecialidades] = linhas[i];
-                numEspecialidades++;
+            if (linhas[i] != null && !linhas[i].trim().isEmpty()) {
+                // Ignora linhas de comentário
+                if (linhas[i].trim().startsWith("#")) {
+                    continue;
+                }
+
+                try {
+                    especialidades[numEspecialidades] = Especialidade.fromFicheiro(linhas[i], config.getSeparador());
+                    dadosEspecialidades[numEspecialidades] = linhas[i];
+                    numEspecialidades++;
+                } catch (IllegalArgumentException e) {
+                    linhasComErro++;
+                    System.err.println("ERRO ao carregar especialidade (linha " + (i + 1) + "): " + e.getMessage());
+                } catch (Exception e) {
+                    linhasComErro++;
+                    System.err.println("ERRO inesperado ao processar especialidade (linha " + (i + 1) + "): " + linhas[i]);
+                    e.printStackTrace();
+                }
             }
         }
 
-        notificacoes.adicionarLog("Carregadas " + numEspecialidades + " especialidades");
+        if (linhasComErro > 0) {
+            System.err.println("\nAVISO: " + linhasComErro + " linha(s) com erro no ficheiro de especialidades");
+        }
+
+        notificacoes.adicionarLog("Carregadas " + numEspecialidades + " especialidade(s)");
     }
 
     /**
@@ -131,16 +175,35 @@ public class GestorHospital {
     private void carregarSintomas() {
         String[] linhas = gestorFicheiros.carregarSintomas(MAX_SINTOMAS);
         numSintomas = 0;
+        int linhasComErro = 0;
 
         for (int i = 0; i < linhas.length; i++) {
-            if (linhas[i] != null && !linhas[i].isEmpty()) {
-                sintomas[numSintomas] = new Sintoma(linhas[i], config.getSeparador());
-                dadosSintomas[numSintomas] = linhas[i];
-                numSintomas++;
+            if (linhas[i] != null && !linhas[i].trim().isEmpty()) {
+                // Ignora linhas de comentário
+                if (linhas[i].trim().startsWith("#")) {
+                    continue;
+                }
+
+                try {
+                    sintomas[numSintomas] = new Sintoma(linhas[i], config.getSeparador());
+                    dadosSintomas[numSintomas] = linhas[i];
+                    numSintomas++;
+                } catch (IllegalArgumentException e) {
+                    linhasComErro++;
+                    System.err.println("ERRO ao carregar sintoma (linha " + (i + 1) + "): " + e.getMessage());
+                } catch (Exception e) {
+                    linhasComErro++;
+                    System.err.println("ERRO inesperado ao processar sintoma (linha " + (i + 1) + "): " + linhas[i]);
+                    e.printStackTrace();
+                }
             }
         }
 
-        notificacoes.adicionarLog("Carregados " + numSintomas + " sintomas");
+        if (linhasComErro > 0) {
+            System.err.println("\nAVISO: " + linhasComErro + " linha(s) com erro no ficheiro de sintomas");
+        }
+
+        notificacoes.adicionarLog("Carregados " + numSintomas + " sintoma(s)");
     }
 
     // ==================== METODOS CRUD PARA MEDICOS ====================
@@ -373,7 +436,7 @@ public class GestorHospital {
      */
     public Triagem realizarTriagem(Paciente paciente) {
         Triagem triagem = AlgoritmoTriagem.calcular(paciente, dadosSintomas,
-                                                     numSintomas, config.getSeparador());
+                numSintomas, config.getSeparador());
 
         // Aplica o resultado ao paciente
         paciente.setNivelUrgencia(triagem.getNivelUrgencia());
@@ -383,7 +446,7 @@ public class GestorHospital {
         filaEspera.adicionarPaciente(paciente);
 
         notificacoes.notificarPacienteTriagem(paciente.getNome(),
-                                              triagem.getNivelUrgenciaTexto());
+                triagem.getNivelUrgenciaTexto());
 
         return triagem;
     }
@@ -409,7 +472,7 @@ public class GestorHospital {
         if (espSugerida != null) {
             for (int i = 0; i < numMedicos; i++) {
                 if (medicos[i].isDisponivel() &&
-                    medicos[i].getCodigoEspecialidade().equals(espSugerida)) {
+                        medicos[i].getCodigoEspecialidade().equals(espSugerida)) {
                     medico = medicos[i];
                     break;
                 }
@@ -458,7 +521,7 @@ public class GestorHospital {
             filaEspera.removerPaciente(paciente);
 
             notificacoes.adicionarLog("Paciente " + paciente.getNome() +
-                                       " encaminhado para Dr. " + medico.getNome());
+                    " encaminhado para Dr. " + medico.getNome());
             return true;
         }
 
@@ -524,7 +587,7 @@ public class GestorHospital {
             if (!medicos[i].isPresente() && medicos[i].getHoraEntrada() == unidadeAtual) {
                 medicos[i].entrar();
                 notificacoes.notificarMedicoDisponivel(medicos[i].getNome(),
-                                                       medicos[i].getCodigoEspecialidade());
+                        medicos[i].getCodigoEspecialidade());
             }
         }
     }
@@ -580,12 +643,12 @@ public class GestorHospital {
                             gestorEstatisticas.registarSintomasPaciente(pacienteAtendido);
                             if (pacienteAtendido.getEspecialidadeSugerida() != null) {
                                 gestorEstatisticas.registarEspecialidadePaciente(
-                                    pacienteAtendido.getEspecialidadeSugerida());
+                                        pacienteAtendido.getEspecialidadeSugerida());
                             }
                         }
 
                         notificacoes.notificarPacienteAtendido(pacienteAtendido.getNome(),
-                                                               medicos[i].getNome());
+                                medicos[i].getNome());
                     }
 
                     // Verifica se precisa de descanso
@@ -608,7 +671,7 @@ public class GestorHospital {
                     // Descanso terminou
                     medicos[i].terminarDescanso();
                     notificacoes.notificarMedicoDisponivel(medicos[i].getNome(),
-                                                           medicos[i].getCodigoEspecialidade());
+                            medicos[i].getCodigoEspecialidade());
                 }
             }
         }
@@ -631,14 +694,14 @@ public class GestorHospital {
                     // Paciente urgente que esperou demais - sai sem atendimento
                     filaEspera.removerPaciente(p);
                     notificacoes.notificarAlerta("Paciente " + p.getNome() +
-                                                  " saiu sem atendimento (espera excessiva)");
+                            " saiu sem atendimento (espera excessiva)");
                 } else {
                     // Eleva urgencia
                     String nivelAntigo = p.getNivelUrgenciaTexto();
                     p.elevarUrgencia();
                     notificacoes.notificarElevacaoUrgencia(p.getNome(),
-                                                           nivelAntigo,
-                                                           p.getNivelUrgenciaTexto());
+                            nivelAntigo,
+                            p.getNivelUrgenciaTexto());
                 }
             }
         }
@@ -717,7 +780,7 @@ public class GestorHospital {
         int contador = 0;
         for (int i = 0; i < numMedicos; i++) {
             if (medicos[i].isDisponivel() &&
-                medicos[i].getCodigoEspecialidade().equals(codigoEspecialidade)) {
+                    medicos[i].getCodigoEspecialidade().equals(codigoEspecialidade)) {
                 contador++;
             }
         }
@@ -727,7 +790,7 @@ public class GestorHospital {
         int indice = 0;
         for (int i = 0; i < numMedicos; i++) {
             if (medicos[i].isDisponivel() &&
-                medicos[i].getCodigoEspecialidade().equals(codigoEspecialidade)) {
+                    medicos[i].getCodigoEspecialidade().equals(codigoEspecialidade)) {
                 resultado[indice] = medicos[i];
                 indice++;
             }
@@ -744,7 +807,7 @@ public class GestorHospital {
         System.out.println("║                   ESTADO DO HOSPITAL                       ║");
         System.out.println("╠════════════════════════════════════════════════════════════╣");
         System.out.println("║ Dia: " + config.getDiaAtual() +
-                           "  |  Unidade de Tempo: " + config.getUnidadeTempoAtual() + "/24");
+                "  |  Unidade de Tempo: " + config.getUnidadeTempoAtual() + "/24");
         System.out.println("╠════════════════════════════════════════════════════════════╣");
 
         // Medicos

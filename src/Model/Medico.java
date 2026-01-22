@@ -58,13 +58,51 @@ public class Medico {
      * @param separador Separador usado no ficheiro
      */
     public Medico(String linhaFicheiro, String separador) {
+        // Validação da linha
+        if (linhaFicheiro == null || linhaFicheiro.trim().isEmpty()) {
+            throw new IllegalArgumentException("Linha do ficheiro não pode estar vazia");
+        }
+
         String[] dados = linhaFicheiro.split(separador);
 
-        this.nome = dados[0].trim();
-        this.codigoEspecialidade = dados[1].trim();
-        this.horaEntrada = Integer.parseInt(dados[2].trim());
-        this.horaSaida = Integer.parseInt(dados[3].trim());
-        this.valorHora = Double.parseDouble(dados[4].trim());
+        // VALIDAÇÃO: Verificar se tem todos os campos necessários
+        if (dados.length < 5) {
+            throw new IllegalArgumentException(
+                    "Formato inválido na linha do médico. Esperado 5 campos (Nome;Especialidade;HoraEntrada;HoraSaida;ValorHora), " +
+                            "encontrado " + dados.length + " campo(s). Linha: \"" + linhaFicheiro + "\""
+            );
+        }
+
+        try {
+            this.nome = dados[0].trim();
+            this.codigoEspecialidade = dados[1].trim();
+            this.horaEntrada = Integer.parseInt(dados[2].trim());
+            this.horaSaida = Integer.parseInt(dados[3].trim());
+            this.valorHora = Double.parseDouble(dados[4].trim());
+
+            // Validações adicionais
+            if (this.nome.isEmpty()) {
+                throw new IllegalArgumentException("Nome do médico não pode estar vazio");
+            }
+            if (this.codigoEspecialidade.isEmpty()) {
+                throw new IllegalArgumentException("Código da especialidade não pode estar vazio");
+            }
+            if (this.horaEntrada < 1 || this.horaEntrada > 24) {
+                throw new IllegalArgumentException("Hora de entrada deve estar entre 1 e 24");
+            }
+            if (this.horaSaida < 1 || this.horaSaida > 24) {
+                throw new IllegalArgumentException("Hora de saída deve estar entre 1 e 24");
+            }
+            if (this.valorHora < 0) {
+                throw new IllegalArgumentException("Valor por hora não pode ser negativo");
+            }
+
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(
+                    "Erro ao converter valores numéricos na linha: \"" + linhaFicheiro + "\". " +
+                            "Verifique se HoraEntrada, HoraSaida e ValorHora são números válidos.", e
+            );
+        }
 
         // Estado inicial
         this.disponivel = false;
@@ -325,8 +363,8 @@ public class Medico {
      */
     public String toFicheiroString(String separador) {
         return nome + separador + codigoEspecialidade + separador +
-               horaEntrada + separador + horaSaida + separador +
-               (int) valorHora;
+                horaEntrada + separador + horaSaida + separador +
+                (int) valorHora;
     }
 
     @Override

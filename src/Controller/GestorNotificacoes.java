@@ -4,10 +4,6 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Controlador responsável por gerir notificações e logs do sistema
- * Armazena notificações temporárias e mantém histórico de logs
- */
 public class GestorNotificacoes {
 
     private String[] notificacoes;
@@ -23,9 +19,6 @@ public class GestorNotificacoes {
 
     private DateTimeFormatter formatoDataHora;
 
-    /**
-     * Construtor padrão
-     */
     public GestorNotificacoes() {
         this.notificacoes = new String[MAX_NOTIFICACOES];
         this.numNotificacoes = 0;
@@ -37,19 +30,11 @@ public class GestorNotificacoes {
         this.formatoDataHora = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     }
 
-    /**
-     * Construtor com caminho personalizado
-     * @param caminhoFicheiros Caminho onde guardar os logs
-     */
     public GestorNotificacoes(String caminhoFicheiros) {
         this();
         this.caminhoFicheiros = caminhoFicheiros;
     }
 
-    /**
-     * Adiciona uma nova notificação ao sistema
-     * @param mensagem Mensagem da notificação
-     */
     public void adicionarNotificacao(String mensagem) {
         if (numNotificacoes >= MAX_NOTIFICACOES) {
             // Remove a notificação mais antiga
@@ -63,9 +48,6 @@ public class GestorNotificacoes {
         adicionarLog(mensagem);
     }
 
-    /**
-     * Remove a notificação mais antiga (FIFO)
-     */
     private void removerNotificacaoMaisAntiga() {
         if (numNotificacoes <= 0) {
             return;
@@ -78,10 +60,6 @@ public class GestorNotificacoes {
         numNotificacoes--;
     }
 
-    /**
-     * Obtém todas as notificações pendentes
-     * @return Array com as notificações
-     */
     public String[] obterNotificacoesPendentes() {
         String[] resultado = new String[numNotificacoes];
 
@@ -92,9 +70,7 @@ public class GestorNotificacoes {
         return resultado;
     }
 
-    /**
-     * Limpa todas as notificações pendentes
-     */
+
     public void limparNotificacoes() {
         for (int i = 0; i < numNotificacoes; i++) {
             notificacoes[i] = null;
@@ -102,18 +78,12 @@ public class GestorNotificacoes {
         numNotificacoes = 0;
     }
 
-    /**
-     * Verifica se existem notificações pendentes
-     * @return true se existem notificações, false caso contrário
-     */
+
     public boolean temNotificacoesPendentes() {
         return numNotificacoes > 0;
     }
 
-    /**
-     * Adiciona uma entrada no log do sistema
-     * @param mensagem Mensagem a registar
-     */
+
     public void adicionarLog(String mensagem) {
         if (numLogs >= MAX_LOGS) {
             // Remove o log mais antigo
@@ -127,9 +97,6 @@ public class GestorNotificacoes {
         numLogs++;
     }
 
-    /**
-     * Remove o log mais antigo (FIFO)
-     */
     private void removerLogMaisAntigo() {
         if (numLogs <= 0) {
             return;
@@ -142,10 +109,6 @@ public class GestorNotificacoes {
         numLogs--;
     }
 
-    /**
-     * Obtém todos os logs registados
-     * @return Array com os logs
-     */
     public String[] obterTodosLogs() {
         String[] resultado = new String[numLogs];
 
@@ -156,11 +119,6 @@ public class GestorNotificacoes {
         return resultado;
     }
 
-    /**
-     * Obtém os últimos N logs
-     * @param quantidade Número de logs a obter
-     * @return Array com os últimos logs
-     */
     public String[] obterUltimosLogs(int quantidade) {
         if (quantidade <= 0) {
             return new String[0];
@@ -178,11 +136,6 @@ public class GestorNotificacoes {
         return resultado;
     }
 
-    /**
-     * Pesquisa logs que contenham uma determinada palavra
-     * @param palavra Palavra a pesquisar
-     * @return Array com os logs encontrados
-     */
     public String[] pesquisarLogs(String palavra) {
         if (palavra == null || palavra.trim().isEmpty()) {
             return new String[0];
@@ -212,9 +165,6 @@ public class GestorNotificacoes {
         return resultado;
     }
 
-    /**
-     * Mostra todos os logs na consola
-     */
     public void mostrarLogs() {
         System.out.println("\n╔════════════════════════════════════════════════════════════╗");
         System.out.println("║                    HISTÓRICO DE LOGS                       ║");
@@ -232,10 +182,6 @@ public class GestorNotificacoes {
         System.out.println("Total de logs: " + numLogs);
     }
 
-    /**
-     * Mostra os últimos N logs na consola
-     * @param quantidade Número de logs a mostrar
-     */
     public void mostrarUltimosLogs(int quantidade) {
         String[] ultimosLogs = obterUltimosLogs(quantidade);
 
@@ -254,10 +200,6 @@ public class GestorNotificacoes {
         System.out.println("╚════════════════════════════════════════════════════════════╝");
     }
 
-    /**
-     * Guarda todos os logs num ficheiro
-     * @return true se guardou com sucesso, false caso contrário
-     */
     public boolean guardarLogsEmFicheiro() {
         // Criar diretório se não existir
         File diretorio = new File(caminhoFicheiros);
@@ -281,10 +223,6 @@ public class GestorNotificacoes {
         }
     }
 
-    /**
-     * Carrega logs do ficheiro
-     * @return Número de logs carregados
-     */
     public int carregarLogsDoFicheiro() {
         File ficheiro = new File(caminhoFicheiros + File.separator + FICHEIRO_LOGS);
 
@@ -314,9 +252,6 @@ public class GestorNotificacoes {
         return logsCarregados;
     }
 
-    /**
-     * Limpa todos os logs da memória
-     */
     public void limparLogs() {
         for (int i = 0; i < numLogs; i++) {
             logs[i] = null;
@@ -324,33 +259,19 @@ public class GestorNotificacoes {
         numLogs = 0;
     }
 
-    /**
-     * Define o caminho dos ficheiros
-     * @param caminhoFicheiros Novo caminho
-     */
     public void setCaminhoFicheiros(String caminhoFicheiros) {
         this.caminhoFicheiros = caminhoFicheiros;
     }
 
-    /**
-     * Obtém o número de notificações pendentes
-     * @return Número de notificações
-     */
+
     public int getNumNotificacoes() {
         return numNotificacoes;
     }
 
-    /**
-     * Obtém o número total de logs
-     * @return Número de logs
-     */
     public int getNumLogs() {
         return numLogs;
     }
 
-    /**
-     * Notificações específicas para eventos do hospital
-     */
 
     public void notificarMedicoDisponivel(String nomeMedico, String especialidade) {
         adicionarNotificacao("Médico " + nomeMedico + " (" + especialidade + ") ficou disponível");
