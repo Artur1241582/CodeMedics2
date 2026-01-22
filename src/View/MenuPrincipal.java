@@ -60,8 +60,7 @@ public class MenuPrincipal {
                     MenuEstatisticas.mostrar(scanner, config, gestorNotif, gestorHospital, gestorEstatisticas);
                     break;
                 case 4:
-                    // MenuConfiguracoes.mostrar(scanner, config, gestorNotif);
-                    System.out.println("\nFuncionalidade em desenvolvimento...");
+                    MenuConfiguracoes.mostrar(scanner, config, gestorNotif);
                     Utils.pausar(scanner);
                     break;
                 case 5:
