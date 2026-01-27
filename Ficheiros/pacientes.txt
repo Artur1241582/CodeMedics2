@@ -1,0 +1,3 @@
+Rita Media;Laranja (Media);N/A;1;12;Maria Silva
+Carlos Urgente;Vermelha (Urgente);CARD;1;13;João Martins
+Antonio Costa;Vermelha (Urgente);CARD;1;12;João Martins

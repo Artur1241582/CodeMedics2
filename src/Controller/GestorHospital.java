@@ -416,6 +416,48 @@ public class GestorHospital {
         guardarSintomas();
     }
 
+    /**
+     * Guarda um paciente no historico de pacientes atendidos
+     * Formato: Nome;NivelUrgencia;Especialidade;Dia;Hora;Medico
+     * @param paciente Paciente a guardar
+     */
+    private void guardarPacienteNoHistorico(Paciente paciente) {
+        if (paciente == null || gestorFicheiros == null) {
+            return;
+        }
+
+        String urgencia = paciente.getNivelUrgenciaTexto();
+        String especialidade = paciente.getEspecialidadeSugerida() != null ?
+                              paciente.getEspecialidadeSugerida() : "N/A";
+        String medico = paciente.getMedicoAtribuido() != null ?
+                       paciente.getMedicoAtribuido() : "N/A";
+
+        String linha = paciente.getNome() + config.getSeparador() +
+                      urgencia + config.getSeparador() +
+                      especialidade + config.getSeparador() +
+                      config.getDiaAtual() + config.getSeparador() +
+                      config.getUnidadeTempoAtual() + config.getSeparador() +
+                      medico;
+
+        gestorFicheiros.adicionarPacienteAoHistorico(linha);
+        notificacoes.adicionarLog("Paciente guardado no historico: " + paciente.getNome());
+    }
+
+    /**
+     * Carrega o historico de pacientes atendidos
+     * @return Array com linhas do historico
+     */
+    public String[] carregarHistoricoPacientes() {
+        return gestorFicheiros.carregarPacientes(MAX_PACIENTES_ATENDIDOS);
+    }
+
+    /**
+     * Lista o historico de pacientes atendidos
+     */
+    public void listarHistoricoPacientes() {
+        gestorFicheiros.listarHistoricoPacientes();
+    }
+
     // ==================== REGISTO DE PACIENTES ====================
 
     /**
@@ -637,6 +679,9 @@ public class GestorHospital {
                             pacientesAtendidos[numPacientesAtendidos] = pacienteAtendido;
                             numPacientesAtendidos++;
                         }
+
+                        // Guarda no ficheiro de historico
+                        guardarPacienteNoHistorico(pacienteAtendido);
 
                         // Regista estatisticas
                         if (gestorEstatisticas != null) {

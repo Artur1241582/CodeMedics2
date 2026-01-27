@@ -19,7 +19,7 @@ public class Configuracoes {
     private int unidadeTempoAtual;
     private int diaAtual;
 
-    private final String CAMINHO_PASS = "C:/Users/Lenovo/OneDrive/Documentos/GitHub/CodeMedics2/Ficheiros/password.txt";
+    private final String CAMINHO_PASS = "Ficheiros/password.txt";
 
     public Configuracoes() {
         restaurarPadrao();
