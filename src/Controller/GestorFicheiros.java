@@ -404,6 +404,124 @@ public class GestorFicheiros {
         return contador;
     }
 
+    // ==================== PACIENTES ====================
+
+    /**
+     * Carrega o historico de pacientes do ficheiro
+     * @param maxPacientes Tamanho maximo do array
+     * @return Array de strings com os dados dos pacientes
+     */
+    public String[] carregarPacientes(int maxPacientes) {
+        File ficheiro = new File(caminhoFicheiros + File.separator + FICHEIRO_PACIENTES);
+
+        if (!ficheiro.exists()) {
+            return new String[0];
+        }
+
+        String[] pacientes = new String[maxPacientes];
+        int contador = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(ficheiro))) {
+            String linha;
+
+            while ((linha = br.readLine()) != null && contador < maxPacientes) {
+                linha = linha.trim();
+
+                if (linha.isEmpty() || linha.startsWith("#")) {
+                    continue;
+                }
+
+                pacientes[contador] = linha;
+                contador++;
+            }
+
+        } catch (IOException e) {
+            System.err.println("Erro ao carregar pacientes: " + e.getMessage());
+            return new String[0];
+        }
+
+        // Redimensiona o array para o tamanho real
+        String[] resultado = new String[contador];
+        for (int i = 0; i < contador; i++) {
+            resultado[i] = pacientes[i];
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Guarda o historico de pacientes atendidos no ficheiro
+     * @param dados Array de strings com os dados dos pacientes
+     * @param numDados Numero de elementos validos no array
+     * @return true se guardou com sucesso
+     */
+    public boolean guardarPacientes(String[] dados, int numDados) {
+        return guardarDados(FICHEIRO_PACIENTES, dados, numDados);
+    }
+
+    /**
+     * Adiciona um paciente ao historico (append)
+     * @param dadosPaciente Linha com dados do paciente
+     * @return true se adicionou com sucesso
+     */
+    public boolean adicionarPacienteAoHistorico(String dadosPaciente) {
+        return adicionarLinha(FICHEIRO_PACIENTES, dadosPaciente);
+    }
+
+    /**
+     * Lista o historico de pacientes
+     * @return Numero de pacientes no historico
+     */
+    public int listarHistoricoPacientes() {
+        File ficheiro = new File(caminhoFicheiros + File.separator + FICHEIRO_PACIENTES);
+
+        if (!ficheiro.exists()) {
+            System.out.println("Ficheiro de historico de pacientes nao encontrado!");
+            return 0;
+        }
+
+        System.out.println("\n+------------------------------------------------------------+");
+        System.out.println("|              HISTORICO DE PACIENTES ATENDIDOS              |");
+        System.out.println("+------------------------------------------------------------+");
+        System.out.println("| Nome                | Urgencia  | Especialidade | Dia     |");
+        System.out.println("+------------------------------------------------------------+");
+
+        int contador = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(ficheiro))) {
+            String linha;
+
+            while ((linha = br.readLine()) != null) {
+                linha = linha.trim();
+
+                if (linha.isEmpty() || linha.startsWith("#")) {
+                    continue;
+                }
+
+                String[] dados = linha.split(separador);
+
+                if (dados.length >= 4) {
+                    String nome = dados[0].trim();
+                    String urgencia = dados[1].trim();
+                    String especialidade = dados[2].trim();
+                    String dia = dados[3].trim();
+
+                    System.out.printf("| %-19s | %-9s | %-13s | %-7s |%n",
+                            nome, urgencia, especialidade, dia);
+                    contador++;
+                }
+            }
+
+            System.out.println("+------------------------------------------------------------+");
+            System.out.println("Total de pacientes atendidos: " + contador);
+
+        } catch (IOException e) {
+            System.err.println("Erro ao ler ficheiro: " + e.getMessage());
+            return 0;
+        }
+
+        return contador;
+    }
+
     // Getters e Setters
 
     public String getCaminhoFicheiros() {

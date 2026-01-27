@@ -1,66 +1,66 @@
-Dor no peito6vermelha6CARD;verde;
-Palpitações6laranja6CARD;verde;
-Coração acelerado6laranja6CARD;verde;
-Falta de ar ao esforço6laranja6CARD;verde;
-Tonturas ao levantar6laranja6CARD;verde;
-Desmaio súbito6vermelha6CARD;verde;
-Inchaço nos tornozelos6laranja6CARD;verde;
-Dor no peito irradiada para braço6vermelha6CARD;verde;
-Pressão arterial muito alta6laranja6CARD;verde;
-Batimentos irregulares6laranja6CARD;verde;
-Cansaço extremo sem motivo6laranja6CARD;verde;
-Suores frios repentinos6vermelha6CARD;verde;
-Sensação de peso no peito6laranja6CARD;verde;
-Dificuldade em respirar deitado6laranja6CARD;verde;
-Febre alta persistente6laranja6PEDI;verde;
-Vómitos repetidos6laranja6PEDI;verde;
-Diarreia intensa6laranja6PEDI;verde;
-Choro inconsolável6laranja6PEDI;verde;
-Erupção cutânea súbita6verde6PEDI;verde;
-Dificuldade em respirar6vermelha6PEDI;verde;
-Tosse persistente6verde6PEDI;verde;
-Letargia incomum6laranja6PEDI;verde;
-Convulsões6vermelha6PEDI;verde;
-Não comer ou beber6laranja6PEDI;verde;
-Desidratação6laranja6PEDI;verde;
-Dores abdominais fortes6laranja6PEDI;verde;
-Irritabilidade persistente6verde6PEDI;verde;
-Manchas roxas sem explicação6laranja6PEDI;verde;
-Chiar ao respirar6laranja6PEDI;verde;
-Dor no joelho6verde6ORTO;verde;
-Dor nas costas6verde6ORTO;verde;
-Fratura suspeita6vermelha6ORTO;verde;
-Inchaço articular6laranja6ORTO;verde;
-Dificuldade em mover um braço ou perna6laranja6ORTO;verde;
-Dor no ombro6verde6ORTO;verde;
-Entorses frequentes6verde6ORTO;verde;
-Rigidez articular6verde6ORTO;verde;
-Dor após queda6laranja6ORTO;verde;
-Deformidade num membro6vermelha6ORTO;verde;
-Espasmos musculares6verde6ORTO;verde;
-Dor na anca ao andar6laranja6ORTO;verde;
-Formigueiro num membro6laranja6ORTO;verde;
-Inflamação do tendão6verde6ORTO;verde;
-Perda de força num membro6laranja6ORTO;verde;
-Tonturas6laranja6CARD;verde;
-Dor torácica ao respirar6vermelha6CARD;verde;
-Falta de ar6vermelha6CARD;verde;
-Cansaço físico fácil6verde6CARD;verde;
-Taquicardia em repouso6laranja6CARD;verde;
-Dor muscular pós-esforço6verde6PEDI;verde;
-Dificuldade em caminhar6laranja6PEDI;verde;
-Queda com impacto6laranja6PEDI;verde;
-Postura alterada6verde6PEDI;verde;
-Inchaço de membro6laranja6PEDI;verde;
-Dor no peito leve6laranja6CARD;verde;
-Edema generalizado6laranja6CARD;verde;
-Desmaio após exercício6laranja6CARD;verde;
-Dores de crescimento6verde6PEDI;verde;
-Batimento irregular percebido6laranja6CARD;verde;
-Fraqueza num membro6laranja6ORTO;verde;
-Palidez súbita6laranja6CARD;verde;
-Cansaço após esforço mínimo6laranja6CARD;verde;
-Dor torácica após queda6laranja6CARD;verde;
-Dificuldade em levantar peso6verde6ORTO;verde;
-Dores difusas nos membros6verde6PEDI;verde;
-Dor ao respirar fundo6laranja6CARD;verde;
+Dor no peito;vermelha;CARD
+Palpitacoes;laranja;CARD
+Coracao acelerado;laranja;CARD
+Falta de ar ao esforco;laranja;CARD
+Tonturas ao levantar;laranja;CARD
+Desmaio subito;vermelha;CARD
+Inchaco nos tornozelos;laranja;CARD
+Dor no peito irradiada para braco;vermelha;CARD
+Pressao arterial muito alta;laranja;CARD
+Batimentos irregulares;laranja;CARD
+Cansaco extremo sem motivo;laranja;CARD
+Suores frios repentinos;vermelha;CARD
+Sensacao de peso no peito;laranja;CARD
+Dificuldade em respirar deitado;laranja;CARD
+Febre alta persistente;laranja;PEDI
+Vomitos repetidos;laranja;PEDI
+Diarreia intensa;laranja;PEDI
+Choro inconsolavel;laranja;PEDI
+Erupcao cutanea subita;verde;PEDI
+Dificuldade em respirar;vermelha;PEDI
+Tosse persistente;verde;PEDI
+Letargia incomum;laranja;PEDI
+Convulsoes;vermelha;PEDI
+Nao comer ou beber;laranja;PEDI
+Desidratacao;laranja;PEDI
+Dores abdominais fortes;laranja;PEDI
+Irritabilidade persistente;verde;PEDI
+Manchas roxas sem explicacao;laranja;PEDI
+Chiar ao respirar;laranja;PEDI
+Dor no joelho;verde;ORTO
+Dor nas costas;verde;ORTO
+Fratura suspeita;vermelha;ORTO
+Inchaco articular;laranja;ORTO
+Dificuldade em mover um braco ou perna;laranja;ORTO
+Dor no ombro;verde;ORTO
+Entorses frequentes;verde;ORTO
+Rigidez articular;verde;ORTO
+Dor apos queda;laranja;ORTO
+Deformidade num membro;vermelha;ORTO
+Espasmos musculares;verde;ORTO
+Dor na anca ao andar;laranja;ORTO
+Formigueiro num membro;laranja;ORTO
+Inflamacao do tendao;verde;ORTO
+Perda de forca num membro;laranja;ORTO
+Tonturas;laranja;CARD
+Dor toracica ao respirar;vermelha;CARD
+Falta de ar;vermelha;CARD
+Cansaco fisico facil;verde;CARD
+Taquicardia em repouso;laranja;CARD
+Dor muscular pos-esforco;verde;PEDI
+Dificuldade em caminhar;laranja;PEDI
+Queda com impacto;laranja;PEDI
+Postura alterada;verde;PEDI
+Inchaco de membro;laranja;PEDI
+Dor no peito leve;laranja;CARD
+Edema generalizado;laranja;CARD
+Desmaio apos exercicio;laranja;CARD
+Dores de crescimento;verde;PEDI
+Batimento irregular percebido;laranja;CARD
+Fraqueza num membro;laranja;ORTO
+Palidez subita;laranja;CARD
+Cansaco apos esforco minimo;laranja;CARD
+Dor toracica apos queda;laranja;CARD
+Dificuldade em levantar peso;verde;ORTO
+Dores difusas nos membros;verde;PEDI
+Dor ao respirar fundo;laranja;CARD
